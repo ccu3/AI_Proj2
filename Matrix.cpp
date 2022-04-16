@@ -1,3 +1,10 @@
+
+#include "Matrix.hpp"
+#include <fstream>
+#include <iostream>
+#include <stdlib.h>
+#include <sstream>
+#include <string>
 #include <cassert>
 
 using namespace std;
@@ -15,6 +22,27 @@ Matrix::Matrix(int num_Rows,int num_Cols) {
 float Matrix::at(int row, int col) {
     return vals[num_Rows * num_Cols + col];
 }
+Matrix Matrix::add(Matrix& target)
+{
+    assert(num_Rows == target.num_Rows && num_Cols == target.num_Cols);
+     Matrix temp(num_Cols, num_Rows);
+    for(int i = 0; i < temp.num_Rows; i++)
+        for(int j = 0; j < temp.num_Cols; j++)
+        {
+            at(i, j) += temp.at(i, j);
+        }
+    return temp;
+}
+Matrix Matrix::addScalar(float s)
+{
+    Matrix temp(num_Cols,num_Rows);
+    for(int i = 0; i < temp.num_Rows; i++)
+        for(int j = 0; j < temp.num_Cols; j++)
+        {
+            temp.at(j, i) += temp.at(j, i) + s;
+        }
+    return temp;
+}
 
 Matrix Matrix::Multiply(Matrix& mult) {
     assert(num_Cols == mult.num_Rows);
@@ -30,36 +58,16 @@ Matrix Matrix::Multiply(Matrix& mult) {
     return temp;
 }
 
-Matrix Matrix::add(Matrix& target)
-{
-    assert(num_Rows == target.num_Rows && num_Cols == target.num_Cols);
-     Matrix temp(num_Cols, num_Rows);
-    for(int i = 0; i < temp.num_Rows; i++)
-        for(int j = 0; j < temp.num_Cols; j++)
-        {
-            at(i, j) += temp.at(i, j);
-        }
-    return temp;
-}
 Matrix Matrix::multiplyScalar(float s)
 {
     Matrix temp(num_Cols,num_Rows);
     for(int i = 0; i < temp.num_Rows; i++)
+    {
         for(int j = 0; j < temp.num_Cols; j++)
         {
             temp.at(j, i) += temp.at(j, i) * s;
         }
-    return temp;
-}
-
-Matrix Matrix::addScalar(float s)
-{
-    Matrix temp(num_Cols,num_Rows);
-    for(int i = 0; i < temp.num_Rows; i++)
-        for(int j = 0; j < temp.num_Cols; j++)
-        {
-            temp.at(j, i) += temp.at(j, i) + s;
-        }
+    }
     return temp;
 }
 

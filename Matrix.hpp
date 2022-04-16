@@ -17,12 +17,12 @@ private:
 public:
     Matrix();
     Matrix(int num_Rows, int num_Cols);
-    float at (int num_Rows, int num_Cols);
-    Matrix Multiply(Matrix& mult);
     Matrix output(int num_Cols, int num_Rows);
-    Matrix add(Matrix& target);
-    Matrix multiplyScalar(float s);
+    float at (int num_Rows, int num_Cols);
+    Matrix Add(Matrix& target);
     Matrix addScalar(float s);
+    Matrix Multiply(Matrix& mult);
+    Matrix multiplyScalar(float s);
     Matrix negative();
     Matrix transpose();
     
