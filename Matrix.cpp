@@ -1,68 +1,94 @@
-#include "Matrix.hpp"
-#include <fstream>
-#include <iostream>
-#include <stdlib.h>
-#include <sstream>
-#include <string>
+#include <cassert>
 
 using namespace std;
 
 Matrix::Matrix(){}
 
-Matrix::Matrix(int num_Rows,int num_Cols,bool rand) {
-    //insert something
+Matrix::Matrix(int num_Rows,int num_Cols) {
+//    for (int i = 0; i < rows_; ++i) {
+//            for (int j = 0; j < cols_; ++j) {
+//                p[i][j] = 0;
+//            }
+//        }
     vals.resize(num_Cols * num_Rows, 0.0f);
 }
 float Matrix::at(int row, int col) {
     return vals[num_Rows * num_Cols + col];
 }
 
-Matrix Matrix::Multiply(const Matrix& mult) {
+Matrix Matrix::Multiply(Matrix& mult) {
     assert(num_Cols == mult.num_Rows);
-    output(mult.num_Cols, num_Rows);
-    for(int j = 0; j < output.num_Rows; j++)
-        for(int k = 0; k < output.num_Cols; k++)
+    Matrix temp(num_Rows, mult.num_Cols);
+    for(int i = 0; i < temp.num_Rows; i++)
+        for(int j = 0; j < temp.num_Cols; j++)
         {
             float result = 0.0f;
             for(int k = 0; k < num_Cols; k++)
-                result += at(k, y) * target.at(x,k);
-            output.at(x,y) = result;
+                result += at(k, i) * mult.at(j,k);
+            result = temp.at(j, i);
         }
-    return output;
+    return temp;
 }
 
 Matrix Matrix::add(Matrix& target)
 {
     assert(num_Rows == target.num_Rows && num_Cols == target.num_Cols);
-     output(num_Cols, num_Rows);
-    for(int y = 0; y < output.num_Rows; y++)
-        for(int x = 0; x < output.num_Cols; x++)
+     Matrix temp(num_Cols, num_Rows);
+    for(int i = 0; i < temp.num_Rows; i++)
+        for(int j = 0; j < temp.num_Cols; j++)
         {
-            output.at(x, y) = at(x, y) + target.at(x, y);
+            at(i, j) += temp.at(i, j);
         }
-    return output;
+    return temp;
 }
 Matrix Matrix::multiplyScalar(float s)
 {
-    assert(num_Cols == target.num_Rows);
-    Matrix output(num_Cols,num_Rows);
-    for(int y = 0; y < output.num_Cols; x++)
-    {
-        output.at(x, y) = at(x, y) * s;
-    }
-    return output;
+    Matrix temp(num_Cols,num_Rows);
+    for(int i = 0; i < temp.num_Rows; i++)
+        for(int j = 0; j < temp.num_Cols; j++)
+        {
+            temp.at(j, i) += temp.at(j, i) * s;
+        }
+    return temp;
 }
 
 Matrix Matrix::addScalar(float s)
 {
-    assert(num_Cols == target.num_Rows);
-    Matrix output(num_Cols,num_Rows);
-    for(int y = 0; y < output.num_Cols; x++)
-    {
-        output.at(x, y) = at(x, y) + s;
-    }
-    return output;
+    Matrix temp(num_Cols,num_Rows);
+    for(int i = 0; i < temp.num_Rows; i++)
+        for(int j = 0; j < temp.num_Cols; j++)
+        {
+            temp.at(j, i) += temp.at(j, i) + s;
+        }
+    return temp;
 }
+
+
+Matrix Matrix::negative()
+{
+    Matrix temp(num_Cols,num_Rows);
+    for(int y = 0; y < temp.num_Rows; y++)
+        for(int x = 0; x < temp.num_Cols; x++)
+        {
+            temp.at(x, y) = -at(x, y);
+        }
+    return temp;
+}
+
+Matrix Matrix::transpose()
+{
+    Matrix temp(num_Rows, num_Cols);
+    for (int i = 0; i < num_Rows; ++i) {
+        for (int j = 0; j < num_Cols; ++j) {
+            temp.at(i,j) = at(j,i);
+        }
+    }
+    return temp;
+}
+
+
+//Just a guide that we can add on later (if needed)
+
 //void Matrix::swapRows(int r1, int r2)
 //{
 //    double *temp = p[r1];
@@ -70,16 +96,6 @@ Matrix Matrix::addScalar(float s)
 //    p[r2] = temp;
 //}
 //
-//Matrix Matrix::transpose()
-//{
-//    Matrix ret(cols_, rows_);
-//    for (int i = 0; i < rows_; ++i) {
-//        for (int j = 0; j < cols_; ++j) {
-//            ret.p[j][i] = p[i][j];
-//        }
-//    }
-//    return ret;
-//}
 //Matrix::~Matrix()
 //{
 //    for (int i = 0; i < rows_; ++i) {
