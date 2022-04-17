@@ -10,27 +10,29 @@
 using namespace std;
 
 class Matrix {
-private:
-    int num_Rows;
-    int num_Cols;
-    vector<float> vals;
-public:
-    Matrix();
-    Matrix(int num_Rows, int num_Cols);
-    Matrix output(int num_Cols, int num_Rows);
-    float at (int num_Rows, int num_Cols);
-    Matrix Add(Matrix& target);
-    Matrix addScalar(float s);
-    Matrix Multiply(Matrix& mult);
-    Matrix multiplyScalar(float s);
-    Matrix negative();
-    Matrix transpose();
+    private:
+        int num_Rows;
+        int num_Cols;
+        vector<float> vals;
+    public:
+        Matrix();
+        Matrix(int num_Rows, int num_Cols);
+        ~Matrix();
+        Matrix Output(int num_Cols, int num_Rows);
+        float& At(int num_Rows, int num_Cols);
+        Matrix Add(Matrix& target);
+        Matrix AddScalar(float s);
+        Matrix Multiply(Matrix& mult);
+        Matrix MultiplyScalar(float s);
+        Matrix Negative();
+        Matrix Transpose();
+
+        void Print();
     
 //    void setValue(int r, int c, double v);
 //    double getValue(int r, int c);
 //    void swapRows(int r1, int r2);
     
-    ~Matrix();
 };
 #endif /* Matrix_hpp */
 
