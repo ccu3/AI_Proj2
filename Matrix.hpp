@@ -17,6 +17,7 @@ class Matrix {
     public:
         Matrix();
         Matrix(int num_Rows, int num_Cols);
+        Matrix(int, int, int*);
         ~Matrix();
         Matrix Output(int num_Cols, int num_Rows);
         float& At(int num_Rows, int num_Cols);
@@ -26,6 +27,7 @@ class Matrix {
         Matrix MultiplyScalar(float s);
         Matrix Negative();
         Matrix Transpose();
+        Matrix Logistic();
 
         void Print();
     

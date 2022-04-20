@@ -3,6 +3,8 @@
 #include <fstream>
 #include <iostream>
 #include <stdlib.h>
+#include <time.h>
+#include <math.h>
 #include <sstream>
 #include <string>
 #include <cassert>
@@ -13,13 +15,25 @@ Matrix::Matrix() {}
 Matrix::~Matrix() {}
 
 Matrix::Matrix(int rows, int cols) {
+    srand(time(NULL));
     num_Rows = rows;
     num_Cols = cols;
     vals.resize(num_Cols * num_Rows, 0.0f);
     
    for (int i = 0; i < num_Rows; ++i)
         for (int j = 0; j < num_Cols; ++j)
-            At(i, j) = i + j;
+            At(i, j) = (double) rand() / RAND_MAX * 2 - 1;
+}
+
+Matrix::Matrix(int rows, int cols, int* elements) {
+    srand(time(NULL));
+    num_Rows = rows;
+    num_Cols = cols;
+    vals.resize(num_Cols * num_Rows, 0.0f);
+    
+   for (int i = 0; i < num_Rows; ++i)
+        for (int j = 0; j < num_Cols; ++j)
+            At(i, j) = elements[i * num_Cols + j];
 }
 
 float& Matrix::At(int row, int col) {
@@ -63,7 +77,6 @@ Matrix Matrix::MultiplyScalar(float s) {
     return temp;
 }
 
-
 Matrix Matrix::Negative() {
     Matrix temp(num_Rows, num_Cols);
     for(int i = 0; i < num_Rows; i++)
@@ -77,6 +90,14 @@ Matrix Matrix::Transpose() {
     for (int i = 0; i < num_Cols; ++i)
         for (int j = 0; j < num_Rows; ++j)
             temp.At(i,j) = At(j,i);
+    return temp;
+}
+
+Matrix Matrix::Logistic() {
+    Matrix temp(num_Rows, num_Cols);
+    for(int i = 0; i < num_Rows; i++)
+        for(int j = 0; j < num_Cols; j++)
+            temp.At(i, j) = 1 / (1 + exp(-At(i, j)));
     return temp;
 }
 

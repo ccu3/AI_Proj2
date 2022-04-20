@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -std=c++11 -Wall
      
-OBJS = main.o Matrix.o
+OBJS = main.o Matrix.o NeuralNetwork.o
 
 langDetector : ${OBJS}
 	${CXX} $(CXXFLAGS) -o $@ ${OBJS}

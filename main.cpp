@@ -1,5 +1,6 @@
 
 #include "Matrix.hpp"
+#include "NeuralNetwork.hpp"
 
 #include <stdio.h>
 #include <string>
@@ -7,17 +8,10 @@
 using namespace std;
 
 int main() {
-    cout << "Enter size of matrix [r c]: ";
-    int r, c;
-    cin >> r >> c;
-    Matrix m1(r, c);
-    cout << "Enter size of matrix [r c]: ";
-    cin >> r >> c;
-    Matrix m2(r, c);
-    m1.Print();
-    m2.Print();
-    cout << "Added:\n";
-    Matrix m3 = m1.Transpose();
-    m3.Print();
+    int top[] = {6, 10, 16, 10, 3};
+    int inp[] = {1, 0, 1, 0, 0, 0};
+    Matrix in(6, 1, inp);
+    NeuralNetwork net(5, top);
+    net.ForwardPropagate(in);
 }
 
