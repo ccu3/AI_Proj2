@@ -15,6 +15,7 @@ public:
     vector<string> ValidTokens(string token);
     vector<string> CheckDuplicates(vector<string> &);
     vector<string> RemoveDuplicates(vector<string>&);
+    vector<string> RemoveSpecialChar(vector<string>&);
 };
 #endif /* TokenManager_hpp */
 

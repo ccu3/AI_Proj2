@@ -1,4 +1,3 @@
-
 #ifndef Matrix_hpp
 #define Matrix_hpp
 

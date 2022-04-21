@@ -27,6 +27,7 @@ vector<string> TokenManager::ValidTokens(string token) {
         }
     CheckDuplicates(tokens);
     RemoveDuplicates(tokens);
+    RemoveSpecialChar(tokens);
     Print(tokens);
     return  tokens;
 }
@@ -52,6 +53,7 @@ vector<string> TokenManager::CheckDuplicates(vector<string> &input) {
                 cout << "Duplicate: " << known[i] << endl;
     return known;
 }
+
 vector<string> TokenManager::RemoveDuplicates(vector<string> &noDuplicates) {
     
     auto end = noDuplicates.end();
@@ -70,4 +72,27 @@ void TokenManager::Print(vector <string> tokens) {
        }
 
 }
+vector<string> TokenManager::RemoveSpecialChar(vector<string>& words) {
+    string special = string("`~!@#$%^&*()_+-={}|[]\;':\",./<>?");
+    string num = string("1234567890");
+    string temp = "";
+      
+    for (int j = 0; j < words.size(); j++)
+    {
+        temp = words[j];
+        for (int i = 0; i < temp.size(); i++) {
+               
+               if (temp[i] < 'A' || temp[i] > 'Z' &&
+                   temp[i] < 'a' || temp[i] > 'z')
+               {
+                   temp.erase(i, 1);
+                   i--;
+               }
+           }
+       
+        words[j] = temp;
+    }
+    
+    return words;
+  }
 
