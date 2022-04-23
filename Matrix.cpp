@@ -44,9 +44,19 @@ Matrix Matrix::Add(Matrix& target) {
     Matrix temp(num_Rows, num_Cols);
     for(int i = 0; i < temp.num_Rows; i++)
         for(int j = 0; j < temp.num_Cols; j++)
-            temp.At(i, j) = At(i, j) + temp.At(i, j);
+            temp.At(i, j) = At(i, j) + target.At(i, j);
     return temp;
 }
+
+Matrix Matrix::AddVector(Matrix& target) {
+    assert(num_Rows == target.num_Rows && target.num_Cols == 1);
+    Matrix temp(num_Rows, num_Cols);
+    for(int i = 0; i < temp.num_Rows; i++)
+        for(int j = 0; j < temp.num_Cols; j++)
+            temp.At(i, j) = At(i, j) + target.At(i, 0);
+    return temp;
+}
+
 Matrix Matrix::AddScalar(float s) {
     Matrix temp(num_Rows, num_Cols);
     for(int i = 0; i < num_Rows; i++)
@@ -65,6 +75,15 @@ Matrix Matrix::Multiply(Matrix& mult) {
                 result += At(i, k) * mult.At(k, j);
             temp.At(i, j) = result;
         }
+    return temp;
+}
+
+Matrix Matrix::MultiplyByElement(Matrix& mult) {
+    assert(num_Rows == mult.num_Rows && num_Cols == mult.num_Cols);
+    Matrix temp(num_Rows, mult.num_Cols);
+    for(int i = 0; i < temp.num_Rows; i++)
+        for(int j = 0; j < temp.num_Cols; j++)
+            temp.At(i, j) = At(i, j) * mult.At(i, j);
     return temp;
 }
 
@@ -92,12 +111,16 @@ Matrix Matrix::Transpose() {
     return temp;
 }
 
-Matrix Matrix::Logistic() {
+Matrix Matrix::Sigmoid() {
     Matrix temp(num_Rows, num_Cols);
     for(int i = 0; i < num_Rows; i++)
         for(int j = 0; j < num_Cols; j++)
             temp.At(i, j) = 1 / (1 + exp(-At(i, j)));
     return temp;
+}
+
+Matrix Matrix::DeSigmoid() {
+    return Sigmoid().AddScalar(-1).Negative().Sigmoid();
 }
 
 void Matrix::Print() {

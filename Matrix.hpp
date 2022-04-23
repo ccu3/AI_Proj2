@@ -21,12 +21,15 @@ class Matrix {
         Matrix Output(int num_Cols, int num_Rows);
         float& At(int num_Rows, int num_Cols);
         Matrix Add(Matrix& target);
+        Matrix AddVector(Matrix& target);
         Matrix AddScalar(float s);
         Matrix Multiply(Matrix& mult);
+        Matrix MultiplyByElement(Matrix& mult);
         Matrix MultiplyScalar(float s);
         Matrix Negative();
         Matrix Transpose();
-        Matrix Logistic();
+        Matrix Sigmoid();
+        Matrix DeSigmoid();
 
         void Print();
     
