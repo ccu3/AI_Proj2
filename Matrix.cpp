@@ -61,7 +61,7 @@ Matrix Matrix::AddScalar(float s) {
     Matrix temp(num_Rows, num_Cols);
     for(int i = 0; i < num_Rows; i++)
         for(int j = 0; j < num_Cols; j++)
-            temp.At(i, j) += s;
+            temp.At(i, j) = At(i, j) + s;
     return temp;
 }
 
@@ -87,11 +87,42 @@ Matrix Matrix::MultiplyByElement(Matrix& mult) {
     return temp;
 }
 
+Matrix Matrix::MultiplyVector(Matrix& target) {
+    assert(num_Rows == target.num_Rows && target.num_Cols == 1);
+    Matrix temp(num_Rows, num_Cols);
+    for(int i = 0; i < temp.num_Rows; i++)
+        for(int j = 0; j < temp.num_Cols; j++)
+            temp.At(i, j) = At(i, j) * target.At(i, 0);
+    return temp;
+}
+
 Matrix Matrix::MultiplyScalar(float s) {
     Matrix temp(num_Rows, num_Cols);
     for(int i = 0; i < num_Rows; i++)
         for(int j = 0; j < num_Cols; j++)
-            temp.At(i, j) *= s;
+            temp.At(i, j) = At(i, j) * s;
+    return temp;
+}
+
+Matrix Matrix::RowSums() {
+    Matrix temp(num_Rows, 1);
+    for(int i = 0; i < num_Rows; i++) {
+        float sum = 0.0;
+        for(int j = 0; j < num_Cols; j++)
+            sum += At(i, j);
+        temp.At(i, 0) = sum;
+    }
+    return temp;
+}
+
+Matrix Matrix::ColSums() {
+    Matrix temp(1, num_Cols);
+    for(int j = 0; j < num_Cols; j++) {
+        float sum = 0.0;
+        for(int i = 0; i < num_Rows; i++)
+            sum += At(i, j);
+        temp.At(0, j) = sum;
+    }
     return temp;
 }
 
@@ -120,7 +151,8 @@ Matrix Matrix::Sigmoid() {
 }
 
 Matrix Matrix::DeSigmoid() {
-    return Sigmoid().AddScalar(-1).Negative().Sigmoid();
+    Matrix sigmoid = Sigmoid();
+    return Sigmoid().AddScalar(-1).Negative().MultiplyByElement(sigmoid);
 }
 
 void Matrix::Print() {

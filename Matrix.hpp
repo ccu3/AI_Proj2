@@ -25,7 +25,10 @@ class Matrix {
         Matrix AddScalar(float s);
         Matrix Multiply(Matrix& mult);
         Matrix MultiplyByElement(Matrix& mult);
+        Matrix MultiplyVector(Matrix& target);
         Matrix MultiplyScalar(float s);
+        Matrix RowSums();
+        Matrix ColSums();
         Matrix Negative();
         Matrix Transpose();
         Matrix Sigmoid();
