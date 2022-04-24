@@ -1,51 +1,74 @@
 import unicodedata
+import pandas as pd
+import csv
+import re
+import random
+
+import warnings
+warnings.simplefilter("ignore")
 
 def strip_accents(text):
     try:
         text = unicode(text, 'utf-8')
     except NameError: # unicode is a default on python 3 
         pass
-
     text = unicodedata.normalize('NFD', text)\
            .encode('ascii', 'ignore')\
            .decode("utf-8")
-
     return str(text)
 
 accepted_languages = {
     'English',
-    'Portugeese',
-    "French",
-    "Dutch",
-    "Spanish",
-    "Danish",
-    "Italian",
-    "Turkish",
-    "Sweedish",
-    "German"
+    # 'Portugeese',
+    'French',
+    # 'Dutch',
+    'Spanish',
+    # 'Danish',
+    'Italian',
+    # 'Turkish',
+    # 'Sweedish',
+    'German'
 }
 
-with open('accented.csv', 'r') as inFile:
-    not_eof = True
-    outFile = open('unaccented.csv', 'w')
-    while not_eof:
-        print("zero")
-        content = inFile.readline()
-        print(content)
-        if not content:
-            print("End Of File")
-            not_eof = False
-        else:
-            pair = content.split(',')
-            print(pair[0])
-            language = pair[1]
-            print(language)
-            if accepted_languages.__contains__(language):
-                stripped_sentence = strip_accents(pair[0]).lower()
-                outFile.write("{0},{1}\n".format(stripped_sentence, language))
-    outFile.close()
+data = pd.read_csv("accented.csv")
+data["Language"].value_counts()
+X = data["Text"]
+Y = data["Language"]
 
 
-s = strip_accents('àéêöhυ conçu à partir r släcka mig är det dags att åka')
+data_list = []
+lang_list = []
+i = 0
+while i < len(X):
+    if accepted_languages.__contains__(Y[i]):
+        text = X[i]
+        text = re.sub(r'[^a-zA-Z ]+', '', text)
+        text = re.sub(r'[[]]', ' ', text)
+        text = strip_accents(text).lower()
+        splits = text.split()
+        for x in splits:
+            if not data_list.__contains__(x):
+                data_list.append(x)
+                lang_list.append(Y[i])
+    i += 1
 
-print(s)
+c = []
+for x, y in zip(data_list, lang_list):
+    temp = [x, y]
+    c.append(temp)
+random.shuffle(c)
+
+# lst_str = str(c)[1:-1]
+# print(lst_str)
+
+flat_list = []
+i = 0
+for sublist in c:
+    for item in sublist:
+        flat_list.append(item)
+        i += 1
+print(i)
+
+with open('unaccented.csv', 'w', encoding='UTF8') as f:
+    writer = csv.writer(f)
+    writer.writerow(flat_list)

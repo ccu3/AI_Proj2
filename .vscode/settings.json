@@ -7,6 +7,11 @@
         "xstring": "cpp",
         "xutility": "cpp",
         "ostream": "cpp",
-        "map": "cpp"
+        "map": "cpp",
+        "iosfwd": "cpp",
+        "string": "cpp",
+        "algorithm": "cpp",
+        "limits": "cpp",
+        "utility": "cpp"
     }
 }

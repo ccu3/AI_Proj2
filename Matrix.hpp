@@ -34,13 +34,10 @@ class Matrix {
         Matrix Transpose();
         Matrix Sigmoid();
         Matrix DeSigmoid();
-
+        vector<float> GetValues();
+        int GetRows();
+        int GetCols();
         void Print();
-    
-//    void setValue(int r, int c, double v);
-//    double getValue(int r, int c);
-//    void swapRows(int r1, int r2);
-    
 };
 #endif /* Matrix_hpp */
 

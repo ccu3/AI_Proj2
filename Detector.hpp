@@ -16,8 +16,12 @@ class Detector {
         vector<string> languages;
     public:
         Detector();
+        Detector(vector<int>, float);
         void Train(vector<string>, vector<string>, int);
         string GetPrediction(string);
+        void SaveToFile(string);
+        void LoadFromFile(vector<int>, float, string);
+        void Print();
 };
 
 #endif

@@ -165,6 +165,23 @@ Matrix Matrix::DeSigmoid() {
     return Sigmoid().AddScalar(-1).Negative().MultiplyByElement(sigmoid);
 }
 
+vector<float> Matrix::GetValues() {
+    vector<float> values;
+    for (int i = 0; i < num_Rows; i++)
+        for (int j = 0; j < num_Cols; j++)
+            values.push_back(At(i, j));
+    return values;
+}
+
+int Matrix::GetRows() {
+    return num_Rows;
+}
+
+int Matrix::GetCols() {
+    return num_Cols;
+}
+
+
 void Matrix::Print() {
     for (int i = 0; i < num_Rows; i++) {
         for (int j = 0; j < num_Cols; j++)
@@ -173,21 +190,3 @@ void Matrix::Print() {
     }
     cout << '\n';
 }
-
-//Just a guide that we can add on later (if needed)
-
-//void Matrix::swapRows(int r1, int r2)
-//{
-//    double *temp = p[r1];
-//    p[r1] = p[r2];
-//    p[r2] = temp;
-//}
-//
-//Matrix::~Matrix()
-//{
-//    for (int i = 0; i < rows_; ++i) {
-//        delete[] p[i];
-//    }
-//    delete[] p;
-//}
-
