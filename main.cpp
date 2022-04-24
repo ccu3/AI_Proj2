@@ -10,6 +10,7 @@ using namespace std;
 
 int main() {
     Detector langDetector();
+    langDetector.Train();
 
     // int top[] = {2, 3, 2};
     // int inp1[] = {1, 0};

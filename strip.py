@@ -13,8 +13,8 @@ def strip_accents(text):
     return str(text)
 
 accepted_languages = {
-    "English",
-    "Portugeese",
+    'English',
+    'Portugeese',
     "French",
     "Dutch",
     "Spanish",
@@ -25,21 +25,24 @@ accepted_languages = {
     "German"
 }
 
-with open("accented.csv") as inFile:
+with open('accented.csv', 'r') as inFile:
     not_eof = True
-    outFile = open("unaccented.csv", 'w')
+    outFile = open('unaccented.csv', 'w')
     while not_eof:
-        file_line = inFile.readline()
-        if not file_line:
+        print("zero")
+        content = inFile.readline()
+        print(content)
+        if not content:
             print("End Of File")
             not_eof = False
         else:
-            content = inFile.readline()
             pair = content.split(',')
+            print(pair[0])
             language = pair[1]
+            print(language)
             if accepted_languages.__contains__(language):
                 stripped_sentence = strip_accents(pair[0]).lower()
-                outFile.write(stripped_sentence + ',' + language + '\n')
+                outFile.write("{0},{1}\n".format(stripped_sentence, language))
     outFile.close()
 
 
