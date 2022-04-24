@@ -16,7 +16,8 @@ class NeuralNetwork {
         Matrix outputLayer;
         float learningRate;
     public:
-        NeuralNetwork(int, int*, float);
+        NeuralNetwork();
+        NeuralNetwork(vector<int>, float);
         Matrix ForwardStep(Matrix, Matrix);
         Matrix ForwardPropagate(Matrix);
         void Backpropagate(Matrix, Matrix);

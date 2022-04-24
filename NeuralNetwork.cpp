@@ -2,8 +2,11 @@
 #include "NeuralNetwork.hpp"
 #include <iostream>
 
-NeuralNetwork::NeuralNetwork(int layerCount, int* topology, float learningRate) {
+NeuralNetwork::NeuralNetwork() {}
+
+NeuralNetwork::NeuralNetwork(vector<int> topology, float learningRate) {
     this->learningRate = learningRate;
+    int layerCount = topology.size();
     inputLayer = Matrix(topology[0], 1);
     outputLayer = Matrix(topology[layerCount - 1], 1);
     weightsAll = vector<Matrix>(layerCount - 1);
@@ -37,7 +40,7 @@ void NeuralNetwork::Backpropagate(Matrix output, Matrix target) {
         Matrix weightedDeltaSum = weightsAll[i].MultiplyVector(deltas[i]).ColSums().Transpose();
         deltas[i - 1] = rawNodeValues[i].DeSigmoid().MultiplyByElement(weightedDeltaSum);
     }
-    
+
     for (unsigned int i = 0; i < weightsAll.size(); i++) {
         Matrix transposedInput = rawNodeValues[i].Sigmoid().Transpose();
         Matrix addend = deltas[i].Multiply(transposedInput).MultiplyScalar(learningRate);

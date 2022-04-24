@@ -24,6 +24,16 @@ Matrix::Matrix(int rows, int cols) {
             At(i, j) = (double) rand() / RAND_MAX * 2 - 1;
 }
 
+Matrix::Matrix(int rows, int cols, float set) {
+    num_Rows = rows;
+    num_Cols = cols;
+    vals.resize(num_Cols * num_Rows, 0.0f);
+    
+   for (int i = 0; i < num_Rows; ++i)
+        for (int j = 0; j < num_Cols; ++j)
+            At(i, j) = set;
+}
+
 Matrix::Matrix(int rows, int cols, int* elements) {
     srand(time(NULL));
     num_Rows = rows;

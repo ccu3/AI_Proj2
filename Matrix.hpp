@@ -16,6 +16,7 @@ class Matrix {
     public:
         Matrix();
         Matrix(int num_Rows, int num_Cols);
+        Matrix(int, int, float);
         Matrix(int, int, int*);
         ~Matrix();
         Matrix Output(int num_Cols, int num_Rows);
