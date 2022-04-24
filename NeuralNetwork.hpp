@@ -20,6 +20,7 @@ class NeuralNetwork {
         NeuralNetwork();
         NeuralNetwork(vector<int>, float);
         NeuralNetwork(vector<int>, float, string);
+        void Reset(vector<int>, float);
         Matrix ForwardStep(Matrix, Matrix);
         Matrix ForwardPropagate(Matrix);
         void Backpropagate(Matrix, Matrix);

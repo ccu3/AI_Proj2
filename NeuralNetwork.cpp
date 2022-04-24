@@ -7,20 +7,11 @@
 NeuralNetwork::NeuralNetwork() {}
 
 NeuralNetwork::NeuralNetwork(vector<int> topology, float learningRate) {
-    this->learningRate = learningRate;
-    this->topology = topology;
-    int layerCount = topology.size();
-    inputLayer = Matrix(topology[0], 1);
-    outputLayer = Matrix(topology[layerCount - 1], 1);
-    weightsAll = vector<Matrix>(layerCount - 1);
-    deltas = vector<Matrix>(layerCount - 1);
-    rawNodeValues = vector<Matrix>(layerCount);
-    for (unsigned int i = 0; i < weightsAll.size(); i++)
-        weightsAll[i] = Matrix(topology[i + 1], topology[i]);
+    Reset(topology, learningRate);
 }
 
 NeuralNetwork::NeuralNetwork(vector<int> topology, float learningRate, string filename) {
-    NeuralNetwork(topology, learningRate);
+    Reset(topology, learningRate);
     ifstream inFile(filename);
     
     string str;
@@ -35,13 +26,23 @@ NeuralNetwork::NeuralNetwork(vector<int> topology, float learningRate, string fi
 
     int counter = 0;
     for (unsigned int i = 0; i < weightsAll.size(); i++) {
-        Matrix weights = weightsAll[i];
-        for (int j = 0; j < weights.GetRows(); j++)
-            for (int k = 0; k < weights.GetCols(); k++) {
-                weights.At(j, k) = storedWeights[counter++];
-                cout << weights.At(j, k) << ',';
-            }
+        for (int j = 0; j < weightsAll[i].GetRows(); j++)
+            for (int k = 0; k < weightsAll[i].GetCols(); k++)
+                weightsAll[i].At(j, k) = storedWeights[counter++];
     }
+}
+
+void NeuralNetwork::Reset(vector<int> topology, float learningRate) {
+    this->learningRate = learningRate;
+    this->topology = topology;
+    int layerCount = topology.size();
+    inputLayer = Matrix(topology[0], 1);
+    outputLayer = Matrix(topology[layerCount - 1], 1);
+    weightsAll = vector<Matrix>(layerCount - 1);
+    deltas = vector<Matrix>(layerCount - 1);
+    rawNodeValues = vector<Matrix>(layerCount);
+    for (unsigned int i = 0; i < weightsAll.size(); i++)
+        weightsAll[i] = Matrix(topology[i + 1], topology[i]);
 }
 
 Matrix NeuralNetwork::ForwardStep(Matrix input, Matrix weights) {
@@ -85,10 +86,10 @@ void NeuralNetwork::SaveToFile(string filename) {
     ofstream outFile(filename);
     for (unsigned int i = 0; i < weightsAll.size(); i++) {
         vector<float> weights = weightsAll[i].GetValues();
-        for (unsigned int j = 0; j < weights.size(); j++) {
+        for (unsigned int j = 0; j < weights.size(); j++)
             outFile << weights[j] << ',';
-        }
     }
+    outFile.close();
 }
 
 void NeuralNetwork::Print() {

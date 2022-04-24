@@ -12,12 +12,12 @@ class Detector {
         NeuralNetwork neuralNet;
         Matrix StringToInput(string);
         Matrix StringToOutput(string);
-        float avgError;
         vector<string> languages;
     public:
         Detector();
         Detector(vector<int>, float);
         void Train(vector<string>, vector<string>, int);
+        float GetAverage(vector<string>, vector<string>);
         string GetPrediction(string);
         void SaveToFile(string);
         void LoadFromFile(vector<int>, float, string);

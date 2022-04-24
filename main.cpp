@@ -11,6 +11,13 @@
 using namespace std;
 
 int main() {
+
+    /* Setup */
+
+    vector<int> topology = {260, 64, 32, 5};
+    float learningRate = 0.6;
+    Detector langDetector(topology, learningRate);
+    
     ifstream inFile("unaccented.csv");
 
     string str;
@@ -27,16 +34,59 @@ int main() {
         langs.push_back(token);
     }
 
-    //vector<int> topology = {260, 64, 32, 5};
-    vector<int> topology = {260, 3, 4, 5};
-    float learningRate = 0.5;
-    Detector langDetector(topology, learningRate);
-    langDetector.Print();
-    langDetector.SaveToFile("weights.csv");
-    langDetector.Train(words, langs, 1);
-    langDetector.Print();
-    cout << langDetector.GetPrediction("This is blood") << endl;
-    langDetector.LoadFromFile(topology, learningRate, "weights.csv");
-    langDetector.Print();
+    /* Train */
+
+    cout << "Train or Interact? (t/i): ";
+    char discission;
+    cin >> discission;
+    cin.ignore();
+    if (discission == 't') {
+        int generations;
+        cout << "Enter number of generations to train: ";
+        cin >> generations;
+        langDetector.LoadFromFile(topology, learningRate, "backup.csv");
+        langDetector.Train(words, langs, generations);
+        langDetector.SaveToFile("weights.csv");
+    }
+
+    /* Evaluate */
+
+    ifstream test_inFile("testing.csv");
+
+    string test_str;
+    vector<string> test_words;
+    vector<string> test_langs;
+
+    test_inFile >> test_str;
+    istringstream test_ss(test_str);
+    string test_token;
+
+    while (getline(test_ss, test_token, ',')) {
+        test_words.push_back(test_token);
+        getline(test_ss, test_token, ',');
+        test_langs.push_back(test_token);
+    }
+
+    langDetector.LoadFromFile(topology, learningRate, "backup.csv");
+    cout << "Evaluation on training data - Average Error: " << langDetector.GetAverage(words, langs) << endl;
+    cout << "Evaluation on testing data - Average Error: " << langDetector.GetAverage(test_words, test_langs) << endl;
+
+    /* Interact */
+
+    langDetector.LoadFromFile(topology, learningRate, "backup.csv");
+    cout << "\nPossible languages detectable: [English, French, Spanish, Italian, German]\n\n";
+    while (true) {
+        cout << "Enter a sentence to detect: ";
+        string test;
+        getline(cin, test);
+        cout << "Predicted language: " << langDetector.GetPrediction(test) << endl;
+        cout << "\nContinue? (y/n): ";
+        char next;
+        cin >> next;
+        cin.ignore();
+        if (next == 'n')
+            break;
+    }
+
 }
 

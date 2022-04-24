@@ -12,6 +12,7 @@
         "string": "cpp",
         "algorithm": "cpp",
         "limits": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "iostream": "cpp"
     }
 }

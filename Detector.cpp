@@ -21,20 +21,30 @@ Detector::Detector(vector<int> topology, float learningRate) {
 }
 
 void Detector::Train(vector<string> input, vector<string> target, int generationCount) {
+    cout << "Average error before training: " << GetAverage(input, target) << endl;
     cout << "Training..." << endl;
     float prevAvg = 0.0;
     for (int i = 0; i < generationCount; i++) {
-        avgError = 0.0;
         Matrix output = neuralNet.ForwardPropagate(StringToInput(input[0]));
         for (unsigned int j = 0; j < input.size(); j++) {
             output = neuralNet.ForwardPropagate(StringToInput(input[j]));
             neuralNet.Backpropagate(output, StringToOutput(target[j]));
-            avgError += neuralNet.GetError(output, StringToOutput(target[j]));
         }
-        avgError /= input.size();
-        cout << "Generation " << i << " - Average error: " << avgError << "\tChange: " << (prevAvg - avgError) << endl;
+        float avgError = GetAverage(input, target);
+        cout << "Generation (" << i + 1 << "/" << generationCount << ") - Average error: " << avgError << "\tChange: " << (prevAvg - avgError) << endl;
         prevAvg = avgError;
+        SaveToFile("backup.csv");
     }
+}
+
+float Detector::GetAverage(vector<string> input, vector<string> target) {
+    float avgError = 0.0;
+    Matrix output = neuralNet.ForwardPropagate(StringToInput(input[0]));
+    for (unsigned int j = 0; j < input.size(); j++) {
+        output = neuralNet.ForwardPropagate(StringToInput(input[j]));
+        avgError += neuralNet.GetError(output, StringToOutput(target[j]));
+    }
+    return avgError /= input.size();
 }
 
 Matrix Detector::StringToInput(string str) {
@@ -76,8 +86,6 @@ string Detector::GetPrediction(string sentence) {
         Matrix output = neuralNet.ForwardPropagate(StringToInput(word));
         sum = sum.Add(output);
     }
-
-    sum.Print();
 
     float max = 0.0;
     int index = -1;

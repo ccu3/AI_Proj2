@@ -61,14 +61,22 @@ random.shuffle(c)
 # lst_str = str(c)[1:-1]
 # print(lst_str)
 
-flat_list = []
+flat_list_training = []
+flat_list_testing = []
 i = 0
 for sublist in c:
     for item in sublist:
-        flat_list.append(item)
+        if i % 4 < 2:
+            flat_list_training.append(item)
+        else:
+            flat_list_testing.append(item)
         i += 1
 print(i)
 
 with open('unaccented.csv', 'w', encoding='UTF8') as f:
     writer = csv.writer(f)
-    writer.writerow(flat_list)
+    writer.writerow(flat_list_training)
+
+with open('testing.csv', 'w', encoding='UTF8') as f:
+    writer = csv.writer(f)
+    writer.writerow(flat_list_testing)
