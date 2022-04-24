@@ -14,7 +14,7 @@ int main() {
 
     /* Setup */
 
-    vector<int> topology = {260, 64, 32, 5};
+    vector<int> topology = {260, 10, 10, 10, 5};
     float learningRate = 0.6;
     Detector langDetector(topology, learningRate);
     
@@ -32,21 +32,6 @@ int main() {
         words.push_back(token);
         getline(ss, token, ',');
         langs.push_back(token);
-    }
-
-    /* Train */
-
-    cout << "Train or Interact? (t/i): ";
-    char discission;
-    cin >> discission;
-    cin.ignore();
-    if (discission == 't') {
-        int generations;
-        cout << "Enter number of generations to train: ";
-        cin >> generations;
-        langDetector.LoadFromFile(topology, learningRate, "backup.csv");
-        langDetector.Train(words, langs, generations);
-        langDetector.SaveToFile("weights.csv");
     }
 
     /* Evaluate */
@@ -70,6 +55,23 @@ int main() {
     langDetector.LoadFromFile(topology, learningRate, "backup.csv");
     cout << "Evaluation on training data - Average Error: " << langDetector.GetAverage(words, langs) << endl;
     cout << "Evaluation on testing data - Average Error: " << langDetector.GetAverage(test_words, test_langs) << endl;
+
+    /* Train */
+
+    cout << "Train or Interact? (t/i): ";
+    char discission;
+    cin >> discission;
+    cin.ignore();
+    if (discission == 't') {
+        int generations;
+        cout << "Enter number of generations to train: ";
+        cin >> generations;
+        langDetector.LoadFromFile(topology, learningRate, "backup.csv");
+        langDetector.Train(words, langs, generations);
+        langDetector.SaveToFile("weights.csv");
+        cout << "Evaluation on training data - Average Error: " << langDetector.GetAverage(words, langs) << endl;
+        cout << "Evaluation on testing data - Average Error: " << langDetector.GetAverage(test_words, test_langs) << endl;
+    }
 
     /* Interact */
 
