@@ -21,19 +21,25 @@ Detector::Detector(vector<int> topology, float learningRate) {
 }
 
 void Detector::Train(vector<string> input, vector<string> target, int generationCount) {
-    cout << "Average error before training: " << GetAverage(input, target) << endl;
+    float prevAvg = GetAverage(input, target);
+    cout << "Average error before training: " << prevAvg << endl;
     cout << "Training..." << endl;
-    float prevAvg = 0.0;
     for (int i = 0; i < generationCount; i++) {
         Matrix output = neuralNet.ForwardPropagate(StringToInput(input[0]));
         for (unsigned int j = 0; j < input.size(); j++) {
             output = neuralNet.ForwardPropagate(StringToInput(input[j]));
             neuralNet.Backpropagate(output, StringToOutput(target[j]));
         }
-        float avgError = GetAverage(input, target);
-        cout << "Generation (" << i + 1 << "/" << generationCount << ") - Average error: " << avgError << "\tChange: " << (prevAvg - avgError) << endl;
-        prevAvg = avgError;
-        SaveToFile("backup.csv");
+        cout << "Generation (" << i + 1 << "/" << generationCount << ")";
+        if (i % 15 == 0) {
+            float avgError = GetAverage(input, target);
+            cout << " - Average error: " << avgError << "\tChange: " << (prevAvg - avgError) << endl;
+            prevAvg = avgError;
+            cout << "  Saving backup.csv" << endl;
+            SaveToFile("backup.csv");
+        }
+        else
+            cout << endl;
     }
 }
 

@@ -14,8 +14,8 @@ int main() {
 
     /* Setup */
 
-    vector<int> topology = {260, 10, 10, 10, 5};
-    float learningRate = 0.6;
+    vector<int> topology = {260, 64, 32, 10, 5};
+    float learningRate = 0.004;
     Detector langDetector(topology, learningRate);
     
     ifstream inFile("unaccented.csv");
@@ -66,7 +66,6 @@ int main() {
         int generations;
         cout << "Enter number of generations to train: ";
         cin >> generations;
-        langDetector.LoadFromFile(topology, learningRate, "backup.csv");
         langDetector.Train(words, langs, generations);
         langDetector.SaveToFile("weights.csv");
         cout << "Evaluation on training data - Average Error: " << langDetector.GetAverage(words, langs) << endl;
